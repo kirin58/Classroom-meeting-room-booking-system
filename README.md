@@ -38,6 +38,8 @@
 | BookingSystem         | Encapsulation + Method-based interface            | 51–83  |
 | Streamlit App         | ใช้ OOP objects (`Room`, `User`, `BookingSystem`) | 86–188 |
 
+
+
 1. Class
 
 มี class ทั้งหมด 5 คลาส
@@ -87,5 +89,3 @@ role() ใน HostUser และ BookerUser มี behavior ต่างกั�
 User เป็น abstract class → [บรรทัด 31–36]
 
 มี abstract method role() ให้ subclass implement → [บรรทัด 34–36]
----
-
