@@ -1,49 +1,88 @@
-#  Booking Web App (OOP + Streamlit)
+# Booking Web App (OOP + Streamlit)
 
-โครงการตัวอย่างระบบ **จองห้องเรียน / ห้องประชุม** ที่เขียนด้วย `Python + Streamlit`  
-โดยใช้หลักการ **Object-Oriented Programming (OOP)** ครบทั้ง 4 หลักการ
+ระบบ **จองห้องเรียน / ห้องประชุม** พัฒนาด้วย **Python + Streamlit** โดยเน้นหลักการ **Object-Oriented Programming (OOP)** ครบทั้ง 4 ข้อ (Encapsulation, Abstraction, Inheritance, Polymorphism)
 
 ---
 
 ## 🔑 สิ่งที่โปรแกรมทำได้
-- 👨‍🏫 **Host**  
-  - สร้างห้องใหม่  
-  - ลบห้อง (เฉพาะห้องที่ตัวเองเป็นเจ้าของ)  
-- 👩‍🎓 **Booker**  
-  - จองห้อง  
-  - ยกเลิกการจองห้อง  
-- 🔍 **ค้นหาห้อง** ด้วย keyword  
-- 📊 **แสดงตารางห้องทั้งหมด** พร้อมสถานะ  
-- ✅ ตรวจสอบความถูกต้องก่อนสร้าง / จอง / ลบห้อง  
+
+1. สร้างห้องใหม่ (Host)
+2. ลบห้อง (Host) — ลบได้เฉพาะเจ้าของห้องและห้องที่ยังไม่ถูกจอง
+3. จองห้อง / ยกเลิกการจอง (Booker)
+4. ค้นหาห้องตามชื่อ keyword
+5. แสดงตารางห้องพร้อมสถานะ
+6. ใช้ Streamlit UI แบบ sidebar และ table
 
 ---
 
-## ⚙️ Features / Functions
+## ⚡ Feature / Function
 
-| Feature | Function |
-|---------|---------|
-| สร้างห้อง | Host เพิ่มห้องใหม่ พร้อมกำหนด ID, ชื่อ, ประเภท, เจ้าของ |
-| ลบห้อง | Host ลบห้องเฉพาะของตัวเอง (ไม่สามารถลบห้องที่ถูกจองแล้ว) |
-| จองห้อง | Booker จองห้อง ถ้าห้องว่าง |
-| ยกเลิกการจอง | Booker ยกเลิกการจองห้องของตัวเอง |
-| ค้นหาห้อง | ค้นหาชื่อห้องแบบพิมพ์ keyword |
-| ตารางห้อง | แสดงรายการห้องทั้งหมด พร้อมสถานะ จองแล้ว/ว่าง |
+| Function                        | ผู้ใช้  | รายละเอียด                                   |
+| ------------------------------- | ------- | -------------------------------------------- |
+| add_room(room)                  | Host    | เพิ่มห้องใหม่ หากรหัสห้องซ้ำจะล้มเหลว        |
+| remove_room(room_id, host_user) | Host    | ลบห้องเฉพาะเจ้าของและยังไม่ถูกจอง            |
+| get_all_rooms()                 | ทั้งหมด | ดึงรายชื่อห้องทั้งหมด                        |
+| search_rooms(keyword)           | ทั้งหมด | ค้นหาห้องตามชื่อ                             |
+| book_room(room_id, booker)      | Booker  | จองห้อง ถ้าห้องว่าง                          |
+| cancel_booking(room_id, booker) | Booker  | ยกเลิกการจอง ถ้าเจ้าของการจองตรงกับผู้ยกเลิก |
 
 ---
 
-## ⚙️ หลักการ OOP ที่ใช้
+## 🏛 หลักการ OOP ที่ใช้
 
-1. **Encapsulation (การห่อหุ้ม)**  
-   - ใช้ attribute แบบ private (`__is_booked`, `__booked_by`)  (บรรทัด 12-13)  
-   - เข้าถึงผ่าน `@property` และ method เช่น `book()`, `cancel_booking()`  (บรรทัด 15-35)
+| Class / Method        | OOP Principle                                     | บรรทัด |
+| --------------------- | ------------------------------------------------- | ------ |
+| Room                  | Encapsulation                                     | 10–28  |
+| User                  | Abstraction                                       | 31–36  |
+| HostUser / BookerUser | Inheritance + Polymorphism                        | 39–48  |
+| BookingSystem         | Encapsulation + Method-based interface            | 51–83  |
+| Streamlit App         | ใช้ OOP objects (`Room`, `User`, `BookingSystem`) | 86–188 |
 
-2. **Abstraction (นามธรรม)**  
-   - คลาส `User` เป็น abstract class  (บรรทัด 38-44)  
-   - กำหนด method `role()` ให้ subclasses implement เอง
+### 1️⃣ Encapsulation
 
-3. **Inheritance (การสืบทอด)**  
-   - `HostUser` และ `BookerUser` สืบทอดจาก `User`  (บรรทัด 46-56)
+* `Room` class ใช้ **private attributes** (`__is_booked`, `__booked_by`)
+* ใช้ **getter และ method** (`book`, `cancel_booking`) เพื่อเข้าถึงและแก้ไขข้อมูลอย่างปลอดภัย
 
-4. **Polymorphism (พหุรูป)**  
-   - เมธอด `role()` ของ `HostUser` และ `BookerUser` ทำงานแตกต่างกัน  
-   - แต่ถูกเรียกผ่าน interface เดียวกัน (`role()`)  (บรรทัด 49, 56)
+### 2️⃣ Abstraction
+
+* `User` เป็น **abstract class** พร้อม `abstract method` `role()`
+* Subclass ต้อง implement `role()` เอง
+
+### 3️⃣ Inheritance
+
+* `HostUser` และ `BookerUser` **สืบทอดจาก `User`**
+* ใช้ `super().__init__()` ใน constructor
+
+### 4️⃣ Polymorphism
+
+* `role()` ใน `HostUser` และ `BookerUser` มี **behavior ต่างกัน**
+* สามารถเรียกผ่าน object ของ `User` แล้วได้ผลลัพธ์แตกต่างกัน
+
+---
+
+## 🖥 การติดตั้งและรัน
+
+```bash
+# ติดตั้ง dependencies
+pip install streamlit pandas
+
+# รันแอป
+streamlit run booking_web.py
+```
+
+---
+
+## 💡 ตัวอย่างการใช้งาน
+
+1. เปิดแอปแล้วสร้างห้องใหม่ผ่าน Sidebar
+2. ดูตารางห้องและสถานะ
+3. เลือกห้องแล้วทำการจองหรือยกเลิกการจอง
+4. Host สามารถลบห้องที่ยังไม่ถูกจอง
+
+---
+
+## 🎨 UI / UX
+
+* ใช้ sidebar สำหรับ **สร้างห้องและค้นหาห้อง**
+* แสดงตารางห้องพร้อมสถานะในหน้า Main
+* ใช้ Streamlit columns สำหรับ **จอง / ยกเลิกห้อง** และ **ลบห้อง**
